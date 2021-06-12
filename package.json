@@ -1,0 +1,23 @@
+{
+  "name": "ugenpass",
+  "version": "1.0.0",
+  "description": "Cryptographically derived passwords",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha *.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hafthor/ugenpass.git"
+  },
+  "author": "Hafthor Stefansson",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/Hafthor/ugenpass/issues"
+  },
+  "homepage": "https://github.com/Hafthor/ugenpass#readme",
+  "devDependencies": {
+    "mocha": "^9.0.0",
+    "pbkdf2": "^3.1.2"
+  }
+}
