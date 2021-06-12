@@ -2,7 +2,7 @@ const ugenpass = require('./index');
 
 
 function calcAndShow() {
-    process.stderr.write('\n');
+    console.error('');
     process.stdout.write(ugenpass(pwd, dom));
     process.exit(0);
 }
@@ -30,6 +30,15 @@ if (!dom) {
     console.error('Usage: node ugenpass example.com');
     process.exit(0);
 }
+if(/[^a-z.-]/.test(dom)) {
+    if(/[A-Z]/.test(dom)) {
+        console.error('WARNING: non-lowercase letters found in domain name');
+    }
+    if(/[^a-z.-]/i.test(dom)) {
+        console.error('WARNING: symbols other than - and . found in domain name');
+    }
+}
+
 process.stderr.write('domain: ' + dom + ', password: ');
 process.on('SIGINT', quit);
 process.on('SIGTERM', quit);
