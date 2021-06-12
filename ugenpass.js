@@ -30,11 +30,11 @@ if (!dom) {
     console.error('Usage: node ugenpass example.com');
     process.exit(0);
 }
-if(/[^a-z.-]/.test(dom)) {
+if(/[^a-z0-9.-]/.test(dom)) {
     if(/[A-Z]/.test(dom)) {
         console.error('WARNING: non-lowercase letters found in domain name');
     }
-    if(/[^a-z.-]/i.test(dom)) {
+    if(/[^a-z0-9.-]/i.test(dom)) {
         console.error('WARNING: symbols other than - and . found in domain name');
     }
 }
