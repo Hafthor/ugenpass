@@ -7,6 +7,8 @@ Usage:
 
 or
 
+`npm i ugenpass`
+
 ```
 const ugenpass = require('ugenpass');
 console.log(ugenpass('password', 'example.com'))
