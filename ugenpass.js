@@ -1,55 +1,15 @@
-const ugenpass = require('./index');
-
-
-function calcAndShow() {
-    console.error('');
-    process.stdout.write(ugenpass(pwd, dom));
-    process.exit(0);
-}
-
-function backspace() {
-    if(pwd) {
-        pwd = pwd.slice(0, -1);
-        process.stderr.write('\b \b');
-    }
-}
-
-function addCharacter(c) {
-    pwd += c;
-    process.stderr.write('*');
-}
-
-function quit() {
-    process.exit(0);
-}
-
-let pwd = '';
-const dom = process.argv[2];
-if (!dom) {
-    console.error('required argument missing');
-    console.error('Usage: node ugenpass example.com');
-    process.exit(0);
-}
-if(/[^a-z0-9.-]/.test(dom)) {
-    if(/[A-Z]/.test(dom)) {
-        console.error('WARNING: non-lowercase letters found in domain name');
-    }
-    if(/[^a-z0-9.-]/i.test(dom)) {
-        console.error('WARNING: symbols other than - and . found in domain name');
-    }
-}
-
-process.stderr.write('domain: ' + dom + ', password: ');
-process.on('SIGINT', quit);
-process.on('SIGTERM', quit);
-
-process.stdin.resume();
+'use strict';
+const domain = process.argv[2];
+domain || process.exit(console.error('required argument missing. Usage: node ugenpass example.com'));
+/^[a-z0-9][a-z0-9-.]*[a-z0-9]$/.test(domain) && !/[-.][-.]/.test(domain) || console.error('WARNING: Possibly invalid domain name given');
+process.stderr.write('domain: ' + domain + ', master password: ');
 process.stdin.setRawMode(true);
-process.stdin.on('data', function(c) {
-    ({
-        '\u0003': quit, 
-        '\u0004': quit,
-        '\r': calcAndShow, 
-        '\u007F': backspace
-    }[c] || addCharacter)(c);
-});
+require('readline').createInterface({input: process.stdin})
+    .on('close', process.exit)
+    .on('line', function(password) {
+        while (/\u007f/.test(password)) { // process backspaces
+            password = password.replace(/[^\u007f]\u007f/, '').replace(/^\u007f+/, '');
+        }
+        console.error('[redacted]')
+        process.exit(process.stdout.write(require('./index')(password, domain)));
+    });
