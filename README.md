@@ -5,7 +5,7 @@ Designed to be:
 
 * strong - uses PBKDF2
 * secure - no networking or storage
-* short - 40 lines of JavaScript
+* short - 40 lines of JavaScript (index.js)
 * simple - only 1 require/import for pbkdf2
 * understandable - see algorithm below
 

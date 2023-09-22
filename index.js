@@ -1,5 +1,7 @@
 'use strict';
 module.exports = ugenpass;
+ugenpass.genHash = genHash;
+ugenpass.longDiv = longDiv;
 const pbkdf2Sync = require('pbkdf2').pbkdf2Sync;
 const CHARSETS = {
     'X': 'ABCDEFGHIJKLMNPQRSTUVWXYZ', // drop O for readability
@@ -12,7 +14,6 @@ const CHARSETS = {
 function ugenpass(password, domain, options) {
     const rounds = (options || {}).rounds || DEFAULTS.rounds;
     const hash = genHash(Buffer.from(password, 'utf-8'), Buffer.from(domain, 'utf-8'), rounds);
-
     const template = (options || {}).template || DEFAULTS.template;
     const charsets = Array.isArray(template) ? template : template.split('').map(function(c) { 
         return CHARSETS[c] || c; 
@@ -21,17 +22,16 @@ function ugenpass(password, domain, options) {
         return charset[longDiv(hash, charset.length)];
     }).join('');
 }
-ugenpass.genHash = genHash;
-ugenpass.longDiv = longDiv;
+
 function genHash(password, domain, rounds) {
     let hash = pbkdf2Sync(password, '', rounds, 32, 'sha256');
     hash = pbkdf2Sync(Buffer.concat([hash, domain]), '', rounds, 32, 'sha256');
     return pbkdf2Sync(Buffer.concat([hash, password]), '', rounds, 32, 'sha256');
 }
+
 function longDiv(bytes, div) {
     let mod = 0;
-    // divide the hash by div
-    for(let i=0; i<bytes.length; i++) {
+    for(let i=0; i<bytes.length; i++) { // divide the hash by div
         const n = bytes[i] + mod * 256;
         mod = n % div;
         bytes[i] = (n / div)|0;

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const ugenpass = require('./index');
 
-describe('gen', function() {
+describe('ugenpass', function() {
     it('should generate expected test password', function() {
         assert.strictEqual(ugenpass('password', 'example.com'), 'dc2Cs!HL6WZ!mY3Pm(YI8If');
     });
@@ -18,12 +18,10 @@ describe('gen', function() {
 
 describe('longDiv', function() {
     it('should long divide', function() {
-        const v = [0, 1, 0, 0], d = 23; // 65536 divided by 23 = 2849 r 9
-        assert.strictEqual(ugenpass.longDiv(v, d), 9);
-        // 2849 = 11x256 + 33
-        assert.deepEqual([0, 0, 11, 33], v);
-        // divided by 23 again = 123 r 20
-        assert.strictEqual(ugenpass.longDiv(v, d), 20)
-        assert.deepEqual([0, 0, 0, 123], v);
+        const v = [0, 1, 0, 0];
+        assert.strictEqual(ugenpass.longDiv(v, 23), 9); // 65536 divided by 23 = 2849 r 9
+        assert.deepEqual(v, [0, 0, 11, 33]);            // 2849 = 11x256 + 33
+        assert.strictEqual(ugenpass.longDiv(v, 23), 20) // divided by 23 again = 123 r 20
+        assert.deepEqual(v, [0, 0, 0, 123]);
     });
 });
